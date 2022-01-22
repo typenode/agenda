@@ -28,7 +28,8 @@ export interface JobAttributes<
   /**
    * The record identity.
    */
-  _id?: mongodb.ObjectId;
+  _id?: mongodb.ObjectId | string;
+  id?: string;
 
   agenda: Agenda;
 

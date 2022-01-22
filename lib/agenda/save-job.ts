@@ -76,11 +76,13 @@ export const saveJob = async function (this: Agenda, job: Job): Promise<Job> {
 
     // Grab information needed to save job but that we don't want to persist in MongoDB
     const id = job.attrs._id;
+    const objectId = job.attrs.id;
     const { unique, uniqueOpts } = job.attrs;
 
     // Store job as JSON and remove props we don't want to store from object
     const props = job.toJSON();
     delete props._id;
+    delete props.id;
     delete props.unique;
     delete props.uniqueOpts;
 
@@ -122,6 +124,8 @@ export const saveJob = async function (this: Agenda, job: Job): Promise<Job> {
         );
         // @ts-expect-error
         protect.nextRunAt = props.nextRunAt;
+        // @ts-expect-error
+        protect._id = objectId;
         delete props.nextRunAt;
       }
 
@@ -176,7 +180,8 @@ export const saveJob = async function (this: Agenda, job: Job): Promise<Job> {
       "using default behavior, inserting new job via insertOne() with props that were set: \n%O",
       props
     );
-    const result = await this._collection.insertOne(props);
+    props._id = objectId
+    const result = await this._collection.insertOne(props as Document);
     return await processDbResult.call(this, job, result);
   } catch (error) {
     debug("processDbResult() received an error, job was not updated/created");

@@ -1,6 +1,6 @@
 {
   "name": "@typenode/agenda",
-  "version": "4.2.2-ws",
+  "version": "4.2.3-ws",
   "description": "Light weight job scheduler for Node.js",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
